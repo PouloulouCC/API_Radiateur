@@ -104,7 +104,7 @@ class MicroController
         return $this->tempMax;
     }
 
-    public function setTempMax(int $tempMax): self
+    public function setTempMax(?int $tempMax): self
     {
         $this->tempMax = $tempMax;
 
@@ -116,7 +116,7 @@ class MicroController
         return $this->tempMin;
     }
 
-    public function setTempMin(int $tempMin): self
+    public function setTempMin(?int $tempMin): self
     {
         $this->tempMin = $tempMin;
 
