@@ -57,6 +57,7 @@ class MicroControllerController extends AbstractController
         dump($request->getContent());
         $data = json_decode($request->getContent());
         dump($data);
+        dump(json_last_error_msg());
 
         $em = $this->getDoctrine()->getManager();
 
