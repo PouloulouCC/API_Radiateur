@@ -50,23 +50,27 @@ class MicroControllerController extends AbstractController
     }
 
     /**
-     * @Route("/createController", name="create_controller")
+     * @Route("/registerController", name="register_controller")
      */
-    public function createControllerAction(Request $request): Response
+    public function registerControllerAction(Request $request): Response
     {
         $data = json_decode($request->getContent());
         $em = $this->getDoctrine()->getManager();
 
-        $microController = new MicroController();
+        $microController = $em->getRepository("App:MicroController")->findOneBy(['macAddress' => $data->mac]);
+        if(count($microController) != 1){
 
-        $microController->setMacAddress($data->mac);
-        $microController->setState(false);
-        $microController->setMode(5);
-        $microController->setTempMax(null);
-        $microController->setTempMin(null);
+            $microController = new MicroController();
 
-        $em->persist($microController);
-        $em->flush();
+            $microController->setMacAddress($data->mac);
+            $microController->setState(false);
+            $microController->setMode(5);
+            $microController->setTempMax(null);
+            $microController->setTempMin(null);
+
+            $em->persist($microController);
+            $em->flush();
+        }
 
         return new JsonResponse(
             array(
