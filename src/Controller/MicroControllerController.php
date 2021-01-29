@@ -54,7 +54,10 @@ class MicroControllerController extends AbstractController
      */
     public function registerControllerAction(Request $request): Response
     {
+        dump($request->getContent());
         $data = json_decode($request->getContent());
+        dump($data);
+
         $em = $this->getDoctrine()->getManager();
 
         $microController = $em->getRepository("App:MicroController")->findOneBy(['macAddress' => $data->mac]);
