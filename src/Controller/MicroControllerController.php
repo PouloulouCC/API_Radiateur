@@ -75,6 +75,7 @@ class MicroControllerController extends AbstractController
             $microController->setMode(5);
             $microController->setTempMax(null);
             $microController->setTempMin(null);
+            $microController->setTemperature(0.0);
 
             $em->persist($microController);
             $em->flush();
