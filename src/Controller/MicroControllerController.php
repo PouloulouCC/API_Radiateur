@@ -62,6 +62,10 @@ class MicroControllerController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
         $microController = $em->getRepository("App:MicroController")->findOneBy(['macAddress' => $data->mac]);
+
+        dump($microController);
+        dump($microController->length);
+
         if(count($microController) != 1){
 
             $microController = new MicroController();
