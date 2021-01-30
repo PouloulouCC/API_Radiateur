@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\MicroController;
+use App\Entity\TempHumidityRecord;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,20 +34,37 @@ class MicroControllerController extends AbstractController
         $microController = new MicroController();
         $microController = $em->getRepository("App:MicroController")->findOneBy(['macAddress' => $data->mac]);
 
-        $microController->addTempHumidityRecord($data->temp);
-        $microController->setState($data->state);
+        if($microController != null) {
 
-        $em->persist($microController);
-        $em->flush();
+            $tempHumidityRecord = new TempHumidityRecord();
 
-        return new JsonResponse(
-            array(
-                "mode" => $microController->getMode(),
-                "tempMax" => $microController->getTempMax(),
-                "tempMin" => $microController->getTempMin(),
-                "hours" => $microController->getHours(),
-            )
-        );
+            //todo: recuperer temps ext avec api meteo
+            $tempHumidityRecord->setMicroController($microController);
+            $tempHumidityRecord->setTemperatureInt($data->temp);
+            $tempHumidityRecord->setTemperatureExt(0.0);
+            $tempHumidityRecord->setHumidityInt($data->humidity);
+            $tempHumidityRecord->setHumidityExt(0.0);
+
+            $microController->addTempHumidityRecord($tempHumidityRecord);
+            $microController->setState($data->state);
+
+            $em->persist($microController);
+            $em->persist($tempHumidityRecord);
+            $em->flush();
+
+            return new JsonResponse(
+                array(
+                    "mode" => $microController->getMode(),
+                    "tempMax" => $microController->getTempMax(),
+                    "tempMin" => $microController->getTempMin(),
+                    "hours" => $microController->getHours(),
+                )
+            );
+        }else{
+            $res = new Response();
+            $res->setStatusCode(404);
+            return $res;
+        }
     }
 
     /**
