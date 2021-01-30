@@ -30,12 +30,12 @@ class MicroController
     private $mode;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $tempMax;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $tempMin;
 
@@ -99,24 +99,24 @@ class MicroController
         return $this;
     }
 
-    public function getTempMax(): ?int
+    public function getTempMax(): ?float
     {
         return $this->tempMax;
     }
 
-    public function setTempMax(?int $tempMax): self
+    public function setTempMax(?float $tempMax): self
     {
         $this->tempMax = $tempMax;
 
         return $this;
     }
 
-    public function getTempMin(): ?int
+    public function getTempMin(): ?float
     {
         return $this->tempMin;
     }
 
-    public function setTempMin(?int $tempMin): self
+    public function setTempMin(?float $tempMin): self
     {
         $this->tempMin = $tempMin;
 
