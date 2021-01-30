@@ -55,9 +55,9 @@ class MicroController
     private $hours = [];
 
     /**
-     * @ORM\OneToMany(targetEntity=TemperatureRecord::class, mappedBy="microController", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=TempHumidityRecord::class, mappedBy="microController", orphanRemoval=true)
      */
-    private $temperatureRecords;
+    private $tempHumidityRecords;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="microControllers")
@@ -66,7 +66,7 @@ class MicroController
 
     public function __construct()
     {
-        $this->temperatureRecords = new ArrayCollection();
+        $this->tempHumidityRecords = new ArrayCollection();
         $this->users = new ArrayCollection();
     }
 
@@ -160,29 +160,29 @@ class MicroController
     }
 
     /**
-     * @return Collection|TemperatureRecord[]
+     * @return Collection|TempHumidityRecord[]
      */
-    public function getTemperatureRecords(): Collection
+    public function getTempHumidityRecords(): Collection
     {
-        return $this->temperatureRecords;
+        return $this->tempHumidityRecords;
     }
 
-    public function addTemperatureRecord(TemperatureRecord $temperatureRecord): self
+    public function addTempHumidityRecord(TempHumidityRecord $tempHumidityRecord): self
     {
-        if (!$this->temperatureRecords->contains($temperatureRecord)) {
-            $this->temperatureRecords[] = $temperatureRecord;
-            $temperatureRecord->setMicroController($this);
+        if (!$this->tempHumidityRecords->contains($tempHumidityRecord)) {
+            $this->tempHumidityRecords[] = $tempHumidityRecord;
+            $tempHumidityRecord->setMicroController($this);
         }
 
         return $this;
     }
 
-    public function removeTemperatureRecord(TemperatureRecord $temperatureRecord): self
+    public function removeTempHumidityRecord(TempHumidityRecord $tempHumidityRecord): self
     {
-        if ($this->temperatureRecords->removeElement($temperatureRecord)) {
+        if ($this->tempHumidityRecords->removeElement($tempHumidityRecord)) {
             // set the owning side to null (unless already changed)
-            if ($temperatureRecord->getMicroController() === $this) {
-                $temperatureRecord->setMicroController(null);
+            if ($tempHumidityRecord->getMicroController() === $this) {
+                $tempHumidityRecord->setMicroController(null);
             }
         }
 

@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\TemperatureRecordRepository;
+use App\Repository\TempHumidityRecordRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=TemperatureRecordRepository::class)
+ * @ORM\Entity(repositoryClass=TempHumidityRecordRepository::class)
  */
-class TemperatureRecord
+class TempHumidityRecord
 {
     /**
      * @ORM\Id
@@ -18,7 +18,7 @@ class TemperatureRecord
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=MicroController::class, inversedBy="temperatureRecords")
+     * @ORM\ManyToOne(targetEntity=MicroController::class, inversedBy="tempHumidityRecords")
      * @ORM\JoinColumn(nullable=false)
      */
     private $microController;
@@ -32,6 +32,16 @@ class TemperatureRecord
      * @ORM\Column(type="float")
      */
     private $temperatureExt;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $HumidityInt;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $HumidityExt;
 
     public function getId(): ?int
     {
@@ -70,6 +80,30 @@ class TemperatureRecord
     public function setTemperatureExt(float $temperatureExt): self
     {
         $this->temperatureExt = $temperatureExt;
+
+        return $this;
+    }
+
+    public function getHumidityInt(): ?int
+    {
+        return $this->HumidityInt;
+    }
+
+    public function setHumidityInt(int $HumidityInt): self
+    {
+        $this->HumidityInt = $HumidityInt;
+
+        return $this;
+    }
+
+    public function getHumidityExt(): ?float
+    {
+        return $this->HumidityExt;
+    }
+
+    public function setHumidityExt(float $HumidityExt): self
+    {
+        $this->HumidityExt = $HumidityExt;
 
         return $this;
     }

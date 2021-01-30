@@ -33,7 +33,7 @@ class MicroControllerController extends AbstractController
         $microController = new MicroController();
         $microController = $em->getRepository("App:MicroController")->findOneBy(['macAddress' => $data->mac]);
 
-        $microController->addTemperatureRecord($data->temp);
+        $microController->addTempHumidityRecord($data->temp);
         $microController->setState($data->state);
 
         $em->persist($microController);
@@ -54,16 +54,16 @@ class MicroControllerController extends AbstractController
      */
     public function registerControllerAction(Request $request): Response
     {
-        dump($request->getContent());
+//        dump($request->getContent());
         $data = json_decode($request->getContent());
-        dump($data);
-        dump(json_last_error_msg());
+//        dump($data);
+//        dump(json_last_error_msg());
 
         $em = $this->getDoctrine()->getManager();
 
         $microController = $em->getRepository("App:MicroController")->findOneBy(['macAddress' => $data->mac]);
 
-        dump($microController);
+//        dump($microController);
 //        dump($microController->length);
 
         if($microController == null){
