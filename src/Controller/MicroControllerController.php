@@ -53,9 +53,9 @@ class MicroControllerController extends AbstractController
                     $apiUrl
                 );
 
-                dump($response);
+                dump($response->getContent());
 
-                $weatherData = json_decode($response);
+                $weatherData = json_decode($response->getContent());
 
                 $microController->setApiLastCall(new DateTime());
                 $microController->setcurrentExtTemperature($weatherData->main->temp);
