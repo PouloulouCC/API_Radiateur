@@ -39,7 +39,9 @@ class MicroControllerController extends AbstractController
 
         if($microController != null) {
 
-            $tempHumidityRecord = new TempHumidityRecord();
+            if($microController->getCity() != null) {
+
+                $tempHumidityRecord = new TempHumidityRecord();
 
 //            dump("diff time : " . $microController->getApiLastCall()->diff(new DateTime())->format('%f'));
 
@@ -48,38 +50,39 @@ class MicroControllerController extends AbstractController
 //                $hour;
 //            }
 
-            if($microController->getApiLastCall()->diff(new DateTime())->format('%f') > 300000){
+                if ($microController->getApiLastCall()->diff(new DateTime())->format('%f') > 300000) {
 
 //                dump("test");
-                $httpClient = HttpClient::create();
-                $apiUrl = "http://api.openweathermap.org/data/2.5/weather?q=Lyon&units=metric&appid=67e9953936d4c9516073368ca7810b5f";
-                $response = $httpClient->request(
-                    'GET',
-                    $apiUrl
-                );
+                    $httpClient = HttpClient::create();
+                    $apiUrl = "http://api.openweathermap.org/data/2.5/weather?q=". $microController->getCity() ."&units=metric&appid=67e9953936d4c9516073368ca7810b5f";
+                    $response = $httpClient->request(
+                        'GET',
+                        $apiUrl
+                    );
 
 //                dump($response->getContent());
 
-                $weatherData = json_decode($response->getContent());
+                    $weatherData = json_decode($response->getContent());
 
-                $microController->setApiLastCall(new DateTime());
-                $microController->setcurrentExtTemperature($weatherData->main->temp);
-                $microController->setcurrentExtHumidity($weatherData->main->humidity);
+                    $microController->setApiLastCall(new DateTime());
+                    $microController->setcurrentExtTemperature($weatherData->main->temp);
+                    $microController->setcurrentExtHumidity($weatherData->main->humidity);
+                }
+
+                $tempHumidityRecord->setMicroController($microController);
+                $tempHumidityRecord->setTemperatureInt($data->temp);
+                $tempHumidityRecord->setTemperatureExt($microController->getcurrentExtTemperature());
+                $tempHumidityRecord->setHumidityInt($data->humidity);
+                $tempHumidityRecord->setHumidityExt($microController->getcurrentExtHumidity());
+                $tempHumidityRecord->setTimeStamp(new DateTime());
+
+                $microController->addTempHumidityRecord($tempHumidityRecord);
+                $microController->setState($data->state);
+
+                $em->persist($microController);
+                $em->persist($tempHumidityRecord);
+                $em->flush();
             }
-
-            $tempHumidityRecord->setMicroController($microController);
-            $tempHumidityRecord->setTemperatureInt($data->temp);
-            $tempHumidityRecord->setTemperatureExt($microController->getcurrentExtTemperature());
-            $tempHumidityRecord->setHumidityInt($data->humidity);
-            $tempHumidityRecord->setHumidityExt($microController->getcurrentExtHumidity());
-            $tempHumidityRecord->setTimeStamp(new DateTime());
-
-            $microController->addTempHumidityRecord($tempHumidityRecord);
-            $microController->setState($data->state);
-
-            $em->persist($microController);
-            $em->persist($tempHumidityRecord);
-            $em->flush();
 
             return new JsonResponse(
                 array(

@@ -74,6 +74,11 @@ class MicroController
      */
     private $currentExtHumidity;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $City;
+
     public function __construct()
     {
         $this->tempHumidityRecords = new ArrayCollection();
@@ -243,6 +248,18 @@ class MicroController
     public function setCurrentExtHumidity(float $currentExtHumidity): self
     {
         $this->currentExtHumidity = $currentExtHumidity;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->City;
+    }
+
+    public function setCity(?string $City): self
+    {
+        $this->City = $City;
 
         return $this;
     }
