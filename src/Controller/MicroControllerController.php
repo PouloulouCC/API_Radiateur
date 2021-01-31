@@ -6,11 +6,12 @@ use App\Entity\MicroController;
 use App\Entity\TempHumidityRecord;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+//use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class MicroControllerController extends AbstractController
 {
@@ -28,7 +29,7 @@ class MicroControllerController extends AbstractController
     /**
      * @Route("/updateData", name="update_data")
      */
-    public function updateDataAction(Request $request, HttpClientInterface $client): Response
+    public function updateDataAction(Request $request): Response
     {
         $data = json_decode($request->getContent());
         $em = $this->getDoctrine()->getManager();
@@ -43,8 +44,9 @@ class MicroControllerController extends AbstractController
             dump("diff time : " . $microController->getApiLastCall()->diff(new DateTime()));
 
             if($microController->getApiLastCall()->diff(new DateTime()) > 300000){
+                $httpClient = HttpClient::create();
                 $apiUrl = "api.openweathermap.org/data/2.5/weather?q=Lyon&units=metric&appid=67e9953936d4c9516073368ca7810b5f";
-                $response = $client->request(
+                $response = $httpClient->request(
                     'GET',
                     $apiUrl
                 );
