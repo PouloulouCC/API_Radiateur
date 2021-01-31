@@ -41,9 +41,9 @@ class MicroControllerController extends AbstractController
 
             $tempHumidityRecord = new TempHumidityRecord();
 
-            dump("diff time : " . $microController->getApiLastCall()->diff(new DateTime())->format('f'));
+            dump("diff time : " . $microController->getApiLastCall()->diff(new DateTime())->format('%f'));
 
-            if($microController->getApiLastCall()->diff(new DateTime())->format('f') > 300000){
+            if($microController->getApiLastCall()->diff(new DateTime())->format('%f') > 300000){
                 $httpClient = HttpClient::create();
                 $apiUrl = "api.openweathermap.org/data/2.5/weather?q=Lyon&units=metric&appid=67e9953936d4c9516073368ca7810b5f";
                 $response = $httpClient->request(
@@ -62,9 +62,9 @@ class MicroControllerController extends AbstractController
             //todo: recuperer temps ext avec api meteo
             $tempHumidityRecord->setMicroController($microController);
             $tempHumidityRecord->setTemperatureInt($data->temp);
-            $tempHumidityRecord->setTemperatureExt($microController->getcurrentExtTemperature);
+            $tempHumidityRecord->setTemperatureExt($microController->getcurrentExtTemperature());
             $tempHumidityRecord->setHumidityInt($data->humidity);
-            $tempHumidityRecord->setHumidityExt($microController->getcurrentExtHumidity);
+            $tempHumidityRecord->setHumidityExt($microController->getcurrentExtHumidity());
             $tempHumidityRecord->setTimeStamp(new DateTime());
 
             $microController->addTempHumidityRecord($tempHumidityRecord);
