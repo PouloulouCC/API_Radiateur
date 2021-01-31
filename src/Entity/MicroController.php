@@ -42,7 +42,7 @@ class MicroController
     /**
      * @ORM\Column(type="float")
      */
-    private $temperature;
+    private $currentExtTemperature;
 
     /**
      * @ORM\Column(type="boolean")
@@ -63,6 +63,16 @@ class MicroController
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="microControllers")
      */
     private $users;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $apiLastCall;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $currentExtHumidity;
 
     public function __construct()
     {
@@ -123,14 +133,14 @@ class MicroController
         return $this;
     }
 
-    public function getTemperature(): ?float
+    public function getcurrentExtTemperature(): ?float
     {
-        return $this->temperature;
+        return $this->currentExtTemperature;
     }
 
-    public function setTemperature(float $temperature): self
+    public function setcurrentExtTemperature(float $currentExtTemperature): self
     {
-        $this->temperature = $temperature;
+        $this->currentExtTemperature = $currentExtTemperature;
 
         return $this;
     }
@@ -209,6 +219,30 @@ class MicroController
     public function removeUser(User $user): self
     {
         $this->users->removeElement($user);
+
+        return $this;
+    }
+
+    public function getApiLastCall(): ?\DateTimeInterface
+    {
+        return $this->apiLastCall;
+    }
+
+    public function setApiLastCall(\DateTimeInterface $apiLastCall): self
+    {
+        $this->apiLastCall = $apiLastCall;
+
+        return $this;
+    }
+
+    public function getCurrentExtHumidity(): ?float
+    {
+        return $this->currentExtHumidity;
+    }
+
+    public function setCurrentExtHumidity(float $currentExtHumidity): self
+    {
+        $this->currentExtHumidity = $currentExtHumidity;
 
         return $this;
     }

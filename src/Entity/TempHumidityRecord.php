@@ -43,6 +43,11 @@ class TempHumidityRecord
      */
     private $HumidityExt;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $timeStamp;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +109,18 @@ class TempHumidityRecord
     public function setHumidityExt(float $HumidityExt): self
     {
         $this->HumidityExt = $HumidityExt;
+
+        return $this;
+    }
+
+    public function getTimeStamp(): ?\DateTimeInterface
+    {
+        return $this->timeStamp;
+    }
+
+    public function setTimeStamp(\DateTimeInterface $timeStamp): self
+    {
+        $this->timeStamp = $timeStamp;
 
         return $this;
     }

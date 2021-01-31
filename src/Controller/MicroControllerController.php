@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\MicroController;
 use App\Entity\TempHumidityRecord;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class MicroControllerController extends AbstractController
 {
@@ -26,7 +28,7 @@ class MicroControllerController extends AbstractController
     /**
      * @Route("/updateData", name="update_data")
      */
-    public function updateDataAction(Request $request): Response
+    public function updateDataAction(Request $request, HttpClientInterface $client): Response
     {
         $data = json_decode($request->getContent());
         $em = $this->getDoctrine()->getManager();
@@ -38,12 +40,30 @@ class MicroControllerController extends AbstractController
 
             $tempHumidityRecord = new TempHumidityRecord();
 
+            dump("diff time : " . $microController->getApiLastCall()->diff(new DateTime()));
+
+            if($microController->getApiLastCall()->diff(new DateTime()) > 300000){
+                $apiUrl = "api.openweathermap.org/data/2.5/weather?q=Lyon&units=metric&appid=67e9953936d4c9516073368ca7810b5f";
+                $response = $client->request(
+                    'GET',
+                    $apiUrl
+                );
+
+                dump($response);
+
+                $weatherData = json_decode($response);
+
+                $microController->setcurrentExtTemperature($weatherData->main->temp);
+                $microController->setcurrentExtHumidity($weatherData->main->humidity);
+            }
+
             //todo: recuperer temps ext avec api meteo
             $tempHumidityRecord->setMicroController($microController);
             $tempHumidityRecord->setTemperatureInt($data->temp);
-            $tempHumidityRecord->setTemperatureExt(0.0);
+            $tempHumidityRecord->setTemperatureExt($microController->getcurrentExtTemperature);
             $tempHumidityRecord->setHumidityInt($data->humidity);
-            $tempHumidityRecord->setHumidityExt(0.0);
+            $tempHumidityRecord->setHumidityExt($microController->getcurrentExtHumidity);
+            $tempHumidityRecord->setTimeStamp(new DateTime());
 
             $microController->addTempHumidityRecord($tempHumidityRecord);
             $microController->setState($data->state);
@@ -57,7 +77,7 @@ class MicroControllerController extends AbstractController
                     "mode" => $microController->getMode(),
                     "tempMax" => $microController->getTempMax(),
                     "tempMin" => $microController->getTempMin(),
-                    "hours" => $microController->getHours(),
+                    "hours" => false,
                 )
             );
         }else{
