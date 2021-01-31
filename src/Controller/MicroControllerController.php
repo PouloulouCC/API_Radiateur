@@ -47,7 +47,7 @@ class MicroControllerController extends AbstractController
 
                 dump("test");
                 $httpClient = HttpClient::create();
-                $apiUrl = "api.openweathermap.org/data/2.5/weather?q=Lyon&units=metric&appid=67e9953936d4c9516073368ca7810b5f";
+                $apiUrl = "http://api.openweathermap.org/data/2.5/weather?q=Lyon&units=metric&appid=67e9953936d4c9516073368ca7810b5f";
                 $response = $httpClient->request(
                     'GET',
                     $apiUrl
