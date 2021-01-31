@@ -41,9 +41,9 @@ class MicroControllerController extends AbstractController
 
             $tempHumidityRecord = new TempHumidityRecord();
 
-            dump("diff time : " . $microController->getApiLastCall()->diff(new DateTime()));
+            dump("diff time : " . $microController->getApiLastCall()->diff(new DateTime())->format('f'));
 
-            if($microController->getApiLastCall()->diff(new DateTime()) > 300000){
+            if($microController->getApiLastCall()->diff(new DateTime())->format('f') > 300000){
                 $httpClient = HttpClient::create();
                 $apiUrl = "api.openweathermap.org/data/2.5/weather?q=Lyon&units=metric&appid=67e9953936d4c9516073368ca7810b5f";
                 $response = $httpClient->request(
