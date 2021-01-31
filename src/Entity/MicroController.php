@@ -50,11 +50,6 @@ class MicroController
     private $state;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $hours = [];
-
-    /**
      * @ORM\OneToMany(targetEntity=TempHumidityRecord::class, mappedBy="microController", orphanRemoval=true)
      */
     private $tempHumidityRecords;
@@ -77,12 +72,18 @@ class MicroController
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $City;
+    private $city;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Period::class, mappedBy="microController", orphanRemoval=true)
+     */
+    private $periods;
 
     public function __construct()
     {
         $this->tempHumidityRecords = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->periods = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -138,12 +139,12 @@ class MicroController
         return $this;
     }
 
-    public function getcurrentExtTemperature(): ?float
+    public function getCurrentExtTemperature(): ?float
     {
         return $this->currentExtTemperature;
     }
 
-    public function setcurrentExtTemperature(float $currentExtTemperature): self
+    public function setCurrentExtTemperature(float $currentExtTemperature): self
     {
         $this->currentExtTemperature = $currentExtTemperature;
 
@@ -158,18 +159,6 @@ class MicroController
     public function setState(bool $state): self
     {
         $this->state = $state;
-
-        return $this;
-    }
-
-    public function getHours(): ?array
-    {
-        return $this->hours;
-    }
-
-    public function setHours(?array $hours): self
-    {
-        $this->hours = $hours;
 
         return $this;
     }
@@ -254,12 +243,42 @@ class MicroController
 
     public function getCity(): ?string
     {
-        return $this->City;
+        return $this->city;
     }
 
-    public function setCity(?string $City): self
+    public function setCity(?string $city): self
     {
-        $this->City = $City;
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Period[]
+     */
+    public function getPeriods(): Collection
+    {
+        return $this->periods;
+    }
+
+    public function addPeriod(Period $period): self
+    {
+        if (!$this->periods->contains($period)) {
+            $this->periods[] = $period;
+            $period->setMicroController($this);
+        }
+
+        return $this;
+    }
+
+    public function removePeriod(Period $period): self
+    {
+        if ($this->periods->removeElement($period)) {
+            // set the owning side to null (unless already changed)
+            if ($period->getMicroController() === $this) {
+                $period->setMicroController(null);
+            }
+        }
 
         return $this;
     }

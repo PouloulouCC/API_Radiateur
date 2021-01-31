@@ -65,15 +65,15 @@ class MicroControllerController extends AbstractController
                     $weatherData = json_decode($response->getContent());
 
                     $microController->setApiLastCall(new DateTime());
-                    $microController->setcurrentExtTemperature($weatherData->main->temp);
-                    $microController->setcurrentExtHumidity($weatherData->main->humidity);
+                    $microController->setCurrentExtTemperature($weatherData->main->temp);
+                    $microController->setCurrentExtHumidity($weatherData->main->humidity);
                 }
 
                 $tempHumidityRecord->setMicroController($microController);
                 $tempHumidityRecord->setTemperatureInt($data->temp);
-                $tempHumidityRecord->setTemperatureExt($microController->getcurrentExtTemperature());
+                $tempHumidityRecord->setTemperatureExt($microController->getCurrentExtTemperature());
                 $tempHumidityRecord->setHumidityInt($data->humidity);
-                $tempHumidityRecord->setHumidityExt($microController->getcurrentExtHumidity());
+                $tempHumidityRecord->setHumidityExt($microController->getCurrentExtHumidity());
                 $tempHumidityRecord->setTimeStamp(new DateTime());
 
                 $microController->addTempHumidityRecord($tempHumidityRecord);
