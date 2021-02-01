@@ -37,6 +37,7 @@ class MicroControllerController extends AbstractController
         $microController = new MicroController();
         $microController = $em->getRepository("App:MicroController")->findOneBy(['macAddress' => $data->mac]);
 
+        $hour = false;
         if($microController != null) {
 
             if($microController->getCity() != null) {
@@ -44,11 +45,24 @@ class MicroControllerController extends AbstractController
                 $tempHumidityRecord = new TempHumidityRecord();
 
 //            dump("diff time : " . $microController->getApiLastCall()->diff(new DateTime())->format('%f'));
-
-//            foreach($microController->getHours() as $hour){
-//                if()
-//                $hour;
-//            }
+                $today = new DateTime();
+                foreach($microController->getPeriods() as $period){
+                    dump($period->getWeekDay());
+                    dump($today->format('%N'));
+                    if($period->getWeekDay() == $today->format('%N')){
+                        $startTime = $period->getTimeStart()->format('%H:i:s');
+                        $endTime = $period->getTimeEnd()->format('%H:i:s');
+                        $todayTime = $today->format('%H:i:s');
+                        dump($startTime);
+                        dump($endTime);
+                        dump($todayTime);
+                        if($todayTime > $startTime && $todayTime < $endTime){
+                            dump("true");
+                            $hour = true;
+                            break;
+                        }
+                    }
+                }
 
                 if ($microController->getApiLastCall()->diff(new DateTime())->format('%f') > 300000) {
 
@@ -89,7 +103,7 @@ class MicroControllerController extends AbstractController
                     "mode" => $microController->getMode(),
                     "tempMax" => $microController->getTempMax(),
                     "tempMin" => $microController->getTempMin(),
-                    "hours" => false,
+                    "hours" => $hour,
                 )
             );
         }else{
