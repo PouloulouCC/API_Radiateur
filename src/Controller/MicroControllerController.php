@@ -48,8 +48,8 @@ class MicroControllerController extends AbstractController
                 $today = new DateTime();
                 foreach($microController->getPeriods() as $period){
                     dump($period->getWeekDay());
-                    dump($today->format('%N'));
-                    if($period->getWeekDay() == $today->format('%N')){
+                    dump($today->format('N'));
+                    if($period->getWeekDay() == $today->format('N')){
                         $startTime = $period->getTimeStart()->format('%H:i:s');
                         $endTime = $period->getTimeEnd()->format('%H:i:s');
                         $todayTime = $today->format('%H:i:s');
