@@ -13,6 +13,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 //use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * Class CompanyController
+ * @package App\Controller
+ * @route("/controller")
+ */
 class MicroControllerController extends AbstractController
 {
     /**
