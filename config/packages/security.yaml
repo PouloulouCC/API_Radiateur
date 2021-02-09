@@ -52,4 +52,4 @@ security:
     access_control:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/controller, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/phone, roles: ROLE_PHONE }
+        - { path: ^/mobile, roles: ROLE_MOBILE }
