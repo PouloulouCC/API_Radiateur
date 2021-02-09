@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
@@ -28,6 +31,31 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
 
+        return $this->json(array(
+            'username' => $user->getUsername(),
+            'roles' => $user->getRoles(),
+        ));
+    }
+
+    /**
+     * @Route("/register", name="login")
+     * @return JsonResponse
+     */
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): JsonResponse
+    {
+        $jsonData = json_decode($request->getContent());
+        $em = $this->getDoctrine()->getManager();
+
+        $user = new User();
+
+        $user->setEmail($jsonData->email);
+        $user->setPassword($passwordEncoder->encodePassword($user, $jsonData->password));
+
+        $em->persist($user);
+
+        $em->flush();
+
+        //TODO vérifier ça
         return $this->json(array(
             'username' => $user->getUsername(),
             'roles' => $user->getRoles(),

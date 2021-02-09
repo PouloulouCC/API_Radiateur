@@ -27,6 +27,10 @@ security:
             #                authenticators:
             #                    - App\Security\LoginAuthenticator
 
+        register:
+            pattern:  ^/register
+            stateless: true
+            anonymous: true
 
         api:
             anonymous: true
