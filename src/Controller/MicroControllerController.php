@@ -93,6 +93,8 @@ class MicroControllerController extends AbstractController
                     $microController->setCurrentExtHumidity($weatherData->main->humidity);
                 }
 
+
+
                 $tempHumidityRecord->setMicroController($microController);
                 $tempHumidityRecord->setTemperatureInt($data->temp);
                 $tempHumidityRecord->setTemperatureExt($microController->getCurrentExtTemperature());
@@ -102,6 +104,8 @@ class MicroControllerController extends AbstractController
 
                 $microController->addTempHumidityRecord($tempHumidityRecord);
                 $microController->setState($data->state);
+                $microController->setCurrentTemperature($data->temp);
+                $microController->setCurrentHumidity($data->humidity);
 
                 $em->persist($microController);
                 $em->persist($tempHumidityRecord);

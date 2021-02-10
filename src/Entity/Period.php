@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PeriodRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * @ORM\Entity(repositoryClass=PeriodRepository::class)
@@ -35,6 +36,7 @@ class Period
     /**
      * @ORM\ManyToOne(targetEntity=MicroController::class, inversedBy="periods")
      * @ORM\JoinColumn(nullable=false)
+     * @Ignore()
      */
     private $microController;
 

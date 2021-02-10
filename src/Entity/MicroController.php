@@ -6,6 +6,7 @@ use App\Repository\MicroControllerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * @ORM\Entity(repositoryClass=MicroControllerRepository::class)
@@ -51,11 +52,13 @@ class MicroController
 
     /**
      * @ORM\OneToMany(targetEntity=TempHumidityRecord::class, mappedBy="microController", orphanRemoval=true)
+     * @Ignore()
      */
     private $tempHumidityRecords;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="microControllers")
+     * @Ignore()
      */
     private $users;
 
@@ -76,8 +79,19 @@ class MicroController
 
     /**
      * @ORM\OneToMany(targetEntity=Period::class, mappedBy="microController", orphanRemoval=true)
+     * @Ignore()
      */
     private $periods;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $currentTemperature;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $currentHumidity;
 
     public function __construct()
     {
@@ -279,6 +293,30 @@ class MicroController
                 $period->setMicroController(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCurrentTemperature(): ?float
+    {
+        return $this->currentTemperature;
+    }
+
+    public function setCurrentTemperature(?float $currentTemperature): self
+    {
+        $this->currentTemperature = $currentTemperature;
+
+        return $this;
+    }
+
+    public function getCurrentHumidity(): ?float
+    {
+        return $this->currentHumidity;
+    }
+
+    public function setCurrentHumidity(?float $currentHumidity): self
+    {
+        $this->currentHumidity = $currentHumidity;
 
         return $this;
     }
