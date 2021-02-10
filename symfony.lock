@@ -108,6 +108,9 @@
             "./config/packages/lexik_jwt_authentication.yaml"
         ]
     },
+    "namshi/jose": {
+        "version": "7.2.3"
+    },
     "nelmio/cors-bundle": {
         "version": "1.5",
         "recipe": {
@@ -261,6 +264,9 @@
         "version": "v1.20.0"
     },
     "symfony/polyfill-mbstring": {
+        "version": "v1.20.0"
+    },
+    "symfony/polyfill-php56": {
         "version": "v1.20.0"
     },
     "symfony/polyfill-php73": {
