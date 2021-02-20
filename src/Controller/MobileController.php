@@ -51,6 +51,8 @@ class MobileController extends AbstractController
         return $this->json([
             'temp' => $controller->getCurrentTemperature(),
             'humidity' => $controller->getCurrentHumidity(),
+            'tempExt' => $controller->getCurrentExtTemperature(),
+            'humidityExt' => $controller->getCurrentExtHumidity(),
             'state' => $controller->getState(),
         ]);
     }
