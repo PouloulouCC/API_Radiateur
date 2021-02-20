@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\MicroController;
 use App\Entity\Period;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,6 +18,14 @@ class PeriodRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Period::class);
+    }
+
+    public function findAllByControllerToArray(MicroController $microController){
+        $qb = $this->createQueryBuilder('p')
+            ->where("p.microController = :microController")
+            ->setParameters(array('microController' => $microController));
+
+        return $qb->getQuery()->getArrayResult();
     }
 
     // /**

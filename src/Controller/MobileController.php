@@ -74,17 +74,18 @@ class MobileController extends AbstractController
             return $response;
         }
 
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-
-        $jsonPeriods = $serializer->serialize($controller->getPeriods(), 'json');
+//        $encoders = [new JsonEncoder()];
+//        $normalizers = [new ObjectNormalizer()];
+//        $serializer = new Serializer($normalizers, $encoders);
+//
+//        $jsonPeriods = $serializer->serialize($controller->getPeriods(), 'json');
+        $periods = $em->getRepository('App:Period')->findAllByControllerToArray($controller);
 
         return $this->json([
             'mode' => $controller->getMode(),
             'tempMax' => $controller->getTempMax(),
             'tempMin' => $controller->getTempMin(),
-            'periods' => $jsonPeriods,
+            'periods' => $periods,
         ]);
     }
 
