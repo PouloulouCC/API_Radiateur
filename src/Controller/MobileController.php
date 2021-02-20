@@ -115,17 +115,22 @@ class MobileController extends AbstractController
         }
 
         $controller->setMode($jsonData->mode);
-        $controller->setMode($jsonData->tempMax);
-        $controller->setMode($jsonData->tempMin);
+        $controller->setTempMax($jsonData->tempMax);
+        $controller->setTempMin($jsonData->tempMin);
 
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
+//        $encoders = [new JsonEncoder()];
+//        $normalizers = [new ObjectNormalizer()];
+//        $serializer = new Serializer($normalizers, $encoders);
+//
+//        $periods = $serializer->deserialize($jsonData->periods, Period::class, 'json');
+        $jsonPeriods = $jsonData->periods;
 
-        $periods = $serializer->deserialize($jsonData->periods, Period::class, 'json');
-
-        foreach($periods as $period){
+        foreach($jsonPeriods as $jsonPeriod){
+            $period = new Period();
             $period->setMicroController($controller);
+            $period->setWeekDay($jsonPeriod->weekDay);
+            $period->setTimeStart($jsonPeriod->timeStart);
+            $period->setTimeEnd($jsonPeriod->timeEnd);
             $controller->addPeriod($period);
             $em->persist($period);
         }
