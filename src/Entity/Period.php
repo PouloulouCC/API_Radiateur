@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PeriodRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
@@ -57,24 +58,24 @@ class Period
         return $this;
     }
 
-    public function getTimeStart(): ?\DateTimeInterface
+    public function getTimeStart(): ?DateTimeInterface
     {
         return $this->timeStart;
     }
 
-    public function setTimeStart(\DateTimeInterface $timeStart): self
+    public function setTimeStart(DateTimeInterface $timeStart): self
     {
         $this->timeStart = $timeStart;
 
         return $this;
     }
 
-    public function getTimeEnd(): ?\DateTimeInterface
+    public function getTimeEnd(): ?DateTimeInterface
     {
         return $this->timeEnd;
     }
 
-    public function setTimeEnd(\DateTimeInterface $timeEnd): self
+    public function setTimeEnd(DateTimeInterface $timeEnd): self
     {
         $this->timeEnd = $timeEnd;
 

@@ -182,7 +182,7 @@ class MicroControllerController extends AbstractController
         if($microController != null) {
             return new JsonResponse(
                 array(
-                    "temp" => $microController->getTemperature(),
+                    "temp" => $microController->getCurrentTemperature(),
                     "tempMax" => $microController->getTempMax(),
                     "tempMin" => $microController->getTempMin(),
                     "hours" => $microController->getHours(),
@@ -221,7 +221,7 @@ class MicroControllerController extends AbstractController
     }
 
     /**
-     * @Route("/updateConfig", name="get_config")
+     * @Route("/updateConfig", name="update_config")
      */
     public function updateConfigAction(Request $request): Response
     {
