@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\MicroController;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +18,15 @@ class MicroControllerRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, MicroController::class);
+    }
+
+    public function findAllByUserToArray(User $user){
+
+        $qb = $this->createQueryBuilder('u')
+            ->where("u.users = :user")
+            ->setParameters(array('user' => $user));
+
+        return $qb->getQuery()->getArrayResult();
     }
 
     // /**

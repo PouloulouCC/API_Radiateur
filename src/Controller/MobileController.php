@@ -150,12 +150,15 @@ class MobileController extends AbstractController
     public function getControllers(): Response
     {
         $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
 
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
+//        $encoders = [new JsonEncoder()];
+//        $normalizers = [new ObjectNormalizer()];
+//        $serializer = new Serializer($normalizers, $encoders);
+//
+//        $jsonControllers = $serializer->serialize($user->getMicroControllers(), 'json');
 
-        $jsonControllers = $serializer->serialize($user->getMicroControllers(), 'json');
+        $jsonControllers = $em->getRepository('App:MicroController')->findAllByUserToArray($user);
 
         return $this->json([
             'controllers' => $jsonControllers,
