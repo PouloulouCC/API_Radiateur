@@ -25,7 +25,7 @@ class MicroControllerRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('m')
             ->join('m.users', 'u')
             ->where("u.id = :userId")
-            ->setParameters(array('user' => $user->getId()));
+            ->setParameters(array('userId' => $user->getId()));
 
         return $qb->getQuery()->getArrayResult();
     }
