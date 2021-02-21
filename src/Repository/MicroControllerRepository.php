@@ -22,9 +22,10 @@ class MicroControllerRepository extends ServiceEntityRepository
 
     public function findAllByUserToArray(User $user){
 
-        $qb = $this->createQueryBuilder('u')
-            ->where("u.users = :user")
-            ->setParameters(array('user' => $user));
+        $qb = $this->createQueryBuilder('m')
+            ->join('m.users', 'u')
+            ->where("u.id = :userId")
+            ->setParameters(array('user' => $user->getId()));
 
         return $qb->getQuery()->getArrayResult();
     }
