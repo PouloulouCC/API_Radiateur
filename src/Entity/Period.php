@@ -41,6 +41,11 @@ class Period
      */
     private $microController;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +95,18 @@ class Period
     public function setMicroController(?MicroController $microController): self
     {
         $this->microController = $microController;
+
+        return $this;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

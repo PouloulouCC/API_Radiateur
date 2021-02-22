@@ -165,4 +165,126 @@ class MobileController extends AbstractController
             'controllers' => $jsonControllers,
         ]);
     }
+
+    /**
+     * @Route("/addPeriod", name="addPeriod")
+     * @param Request $request
+     * @return Response
+     */
+    public function addPeriod(Request $request): Response
+    {
+        $jsonData = json_decode($request->getContent());
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $controller = $em->getRepository('App:MicroController')->findOneBy(['macAddress' => $jsonData->mac]);
+
+        if(!$controller->getUsers()->contains($user)) {
+            $response = new Response();
+            $response->setStatusCode(403);
+            return $response;
+        }
+
+        foreach ($jsonData->periods as $jsonPeriod) {
+
+            $period = new Period();
+
+            $period->setTimeStart($jsonData->timeStart);
+            $period->setTimeEnd($jsonData->timeEnd);
+            $period->setWeekDay($jsonData->weekDay);
+            $period->setActive($jsonData->active);
+
+            $controller->addPeriod($period);
+
+            $em->persist($period);
+        }
+        $em->persist($controller);
+
+        $em->flush();
+
+        return $this->json([
+            'statusCode' => "ok",
+        ]);
+    }
+
+    /**
+     * @Route("/updatePeriod", name="updatePeriod")
+     * @param Request $request
+     * @return Response
+     */
+    public function updatePeriod(Request $request): Response
+    {
+        $jsonData = json_decode($request->getContent());
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $controller = $em->getRepository('App:MicroController')->findOneBy(['macAddress' => $jsonData->mac]);
+
+        if(!$controller->getUsers()->contains($user)) {
+            $response = new Response();
+            $response->setStatusCode(403);
+            return $response;
+        }
+
+        foreach ($jsonData->periods as $jsonPeriod) {
+            $period = $em->getRepository('App:Period')->findOneById($jsonData->id);
+
+            if (!$controller->getPeriods()->contains($period)) {
+                $response = new Response();
+                $response->setStatusCode(403);
+                return $response;
+            }
+
+            $period->setTimeStart($jsonData->timeStart);
+            $period->setTimeEnd($jsonData->timeEnd);
+            $period->setWeekDay($jsonData->weekDay);
+            $period->setActive($jsonData->active);
+
+            $em->persist($period);
+        }
+        $em->flush();
+
+        return $this->json([
+            'statusCode' => "ok",
+        ]);
+    }
+
+    /**
+     * @Route("/deletePeriod", name="deletePeriod")
+     * @param Request $request
+     * @return Response
+     */
+    public function deletePeriod(Request $request): Response
+    {
+        $jsonData = json_decode($request->getContent());
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $controller = $em->getRepository('App:MicroController')->findOneBy(['macAddress' => $jsonData->mac]);
+
+        if(!$controller->getUsers()->contains($user)) {
+            $response = new Response();
+            $response->setStatusCode(403);
+            return $response;
+        }
+
+        foreach ($jsonData->periods as $jsonPeriod) {
+            $period = $em->getRepository('App:Period')->findOneById($jsonData->id);
+
+            if (!$controller->getPeriods()->contains($period)) {
+                $response = new Response();
+                $response->setStatusCode(403);
+                return $response;
+            }
+
+            $controller->removePeriod($period);
+        }
+        $em->persist($controller);
+
+        $em->flush();
+
+        return $this->json([
+            'statusCode' => "ok",
+        ]);
+    }
 }
