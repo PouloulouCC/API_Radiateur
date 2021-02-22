@@ -63,13 +63,15 @@ class MicroControllerController extends AbstractController
 //            dump("diff time : " . $microController->getApiLastCall()->diff(new DateTime())->format('%f'));
                 $today = new DateTime();
                 foreach($microController->getPeriods() as $period){
-                    if($period->getWeekDay() == $today->format('N')){
-                        $startTime = $period->getTimeStart()->format('%H:i:s');
-                        $endTime = $period->getTimeEnd()->format('%H:i:s');
-                        $todayTime = $today->format('%H:i:s');
-                        if($todayTime > $startTime && $todayTime < $endTime){
-                            $hour = true;
-                            break;
+                    if($period->getActive()) {
+                        if ($period->getWeekDay() == $today->format('N')) {
+                            $startTime = $period->getTimeStart()->format('%H:i:s');
+                            $endTime = $period->getTimeEnd()->format('%H:i:s');
+                            $todayTime = $today->format('%H:i:s');
+                            if ($todayTime > $startTime && $todayTime < $endTime) {
+                                $hour = true;
+                                break;
+                            }
                         }
                     }
                 }
@@ -118,6 +120,7 @@ class MicroControllerController extends AbstractController
                     "tempMax" => $microController->getTempMax(),
                     "tempMin" => $microController->getTempMin(),
                     "hour" => $hour,
+                    "active" => $microController->getActive(),
                 )
             );
         }else{
