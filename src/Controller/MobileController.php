@@ -287,4 +287,64 @@ class MobileController extends AbstractController
             'statusCode' => "ok",
         ]);
     }
+
+    /**
+     * @Route("/activateController", name="activateController")
+     * @param Request $request
+     * @return Response
+     */
+    public function activateController(Request $request): Response
+    {
+        $jsonData = json_decode($request->getContent());
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $controller = $em->getRepository('App:MicroController')->findOneBy(['macAddress' => $jsonData->mac]);
+
+        if(!$controller->getUsers()->contains($user)) {
+            $response = new Response();
+            $response->setStatusCode(403);
+            return $response;
+        }
+
+        $controller->setActive(true);
+
+        $em->persist($controller);
+
+        $em->flush();
+
+        return $this->json([
+            'statusCode' => "ok",
+        ]);
+    }
+
+    /**
+     * @Route("/deactivateController", name="deactivateController")
+     * @param Request $request
+     * @return Response
+     */
+    public function deactivateController(Request $request): Response
+    {
+        $jsonData = json_decode($request->getContent());
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $controller = $em->getRepository('App:MicroController')->findOneBy(['macAddress' => $jsonData->mac]);
+
+        if(!$controller->getUsers()->contains($user)) {
+            $response = new Response();
+            $response->setStatusCode(403);
+            return $response;
+        }
+
+        $controller->setActive(false);
+
+        $em->persist($controller);
+
+        $em->flush();
+
+        return $this->json([
+            'statusCode' => "ok",
+        ]);
+    }
 }
