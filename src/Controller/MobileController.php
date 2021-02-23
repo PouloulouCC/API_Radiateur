@@ -347,4 +347,34 @@ class MobileController extends AbstractController
             'statusCode' => "ok",
         ]);
     }
+
+    /**
+     * @Route("/updateMode", name="updateMode")
+     * @param Request $request
+     * @return Response
+     */
+    public function updateMode(Request $request): Response
+    {
+        $jsonData = json_decode($request->getContent());
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $controller = $em->getRepository('App:MicroController')->findOneBy(['macAddress' => $jsonData->mac]);
+
+        if(!$controller->getUsers()->contains($user)) {
+            $response = new Response();
+            $response->setStatusCode(403);
+            return $response;
+        }
+
+        $controller->setMode($jsonData->mode);
+
+        $em->persist($controller);
+
+        $em->flush();
+
+        return $this->json([
+            'statusCode' => "ok",
+        ]);
+    }
 }
