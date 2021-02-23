@@ -50,6 +50,9 @@ class UserController extends AbstractController
 
         $user->setEmail($jsonData->email);
         $user->setPassword($passwordEncoder->encodePassword($user, $jsonData->password));
+        $user->setFirstName($jsonData->firstName);
+        $user->setLastName($jsonData->lastName);
+        $user->setRoles(["ROLE_MOBILE"]);
 
         $em->persist($user);
 
