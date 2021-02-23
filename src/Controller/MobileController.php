@@ -87,6 +87,7 @@ class MobileController extends AbstractController
             'mode' => $controller->getMode(),
             'tempMax' => $controller->getTempMax(),
             'tempMin' => $controller->getTempMin(),
+            'active' => $controller->getActive(),
             'periods' => $periods,
         ]);
     }
