@@ -58,10 +58,13 @@ class UserController extends AbstractController
 
         $em->flush();
 
+        $jwtManager = $this->container->get('lexik_jwt_authentication.jwt_manager');
+
         //TODO vérifier ça
         return $this->json(array(
             'username' => $user->getUsername(),
             'roles' => $user->getRoles(),
+            'token' => $jwtManager->create($user)
         ));
     }
 }
