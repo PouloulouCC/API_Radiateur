@@ -38,13 +38,21 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/register", name="login")
+     * @Route("/register", name="register")
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
      * @return JsonResponse
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): JsonResponse
     {
         $jsonData = json_decode($request->getContent());
         $em = $this->getDoctrine()->getManager();
+
+        if($em->getRepository('App:User')->findOneBy(["email" => $jsonData->email]) != null){
+            $response = new JsonResponse(["error" => "user already exist"]);
+            $response->setStatusCode(403);
+            return $response;
+        }
 
         $user = new User();
 
