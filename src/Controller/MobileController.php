@@ -30,6 +30,30 @@ class MobileController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @Route("/addController", name="addController")
+     * @param Request $request
+     * @return Response
+     */
+    public function addController(Request $request): Response
+    {
+        $jsonData = json_decode($request->getContent());
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $controller = $em->getRepository('App:MicroController')->findOneBy(['macAddress' => $jsonData->mac]);
+
+        $controller->addUser($user);
+
+        $em->persist($user);
+        $em->flush();
+
+        return $this->json([
+            'statusCode' => "ok",
+        ]);
+    }
+
     /**
      * @Route("/getData", name="getData")
      * @param Request $request
@@ -85,6 +109,41 @@ class MobileController extends AbstractController
         $periods = $em->getRepository('App:Period')->findAllByControllerToArray($controller);
 
         return $this->json([
+            'mode' => $controller->getMode(),
+            'tempMax' => $controller->getTempMax(),
+            'tempMin' => $controller->getTempMin(),
+            'active' => $controller->getActive(),
+            'periods' => $periods,
+        ]);
+    }
+
+    /**
+     * @Route("/getDataConfig", name="getDataConfig")
+     * @param Request $request
+     * @return Response
+     */
+    public function getDataConfig(Request $request): Response
+    {
+        $jsonData = json_decode($request->getContent());
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $controller = $em->getRepository('App:MicroController')->findOneBy(['macAddress' => $jsonData->mac]);
+
+        if(!$controller->getUsers()->contains($user)) {
+            $response = new JsonResponse("error", "You are not authorized to access this data");
+            $response->setStatusCode(403);
+            return $response;
+        }
+
+        $periods = $em->getRepository('App:Period')->findAllByControllerToArray($controller);
+
+        return $this->json([
+            'temp' => $controller->getCurrentTemperature(),
+            'humidity' => $controller->getCurrentHumidity(),
+            'tempExt' => $controller->getCurrentExtTemperature(),
+            'humidityExt' => $controller->getCurrentExtHumidity(),
+            'state' => $controller->getState(),
             'mode' => $controller->getMode(),
             'tempMax' => $controller->getTempMax(),
             'tempMin' => $controller->getTempMin(),
