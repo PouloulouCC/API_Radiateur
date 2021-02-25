@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Period;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -71,7 +72,7 @@ class MobileController extends AbstractController
         $controller = $em->getRepository('App:MicroController')->findOneBy(['macAddress' => $jsonData->mac]);
 
         if(!$controller->getUsers()->contains($user)) {
-            $response = new Response();
+            $response = new JsonResponse("error", "You are not authorized to access this data");
             $response->setStatusCode(403);
             return $response;
         }
