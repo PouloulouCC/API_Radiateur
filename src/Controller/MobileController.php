@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Period;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -250,8 +251,8 @@ class MobileController extends AbstractController
 
             $period = new Period();
 
-            $period->setTimeStart($jsonPeriod->timeStart);
-            $period->setTimeEnd($jsonPeriod->timeEnd);
+            $period->setTimeStart(new DateTime($jsonPeriod->timeStart));
+            $period->setTimeEnd(new DateTime($jsonPeriod->timeEnd));
             $period->setWeekDay($jsonPeriod->weekDay);
             $period->setActive($jsonPeriod->active);
             $period->setMicroController($controller);
@@ -297,8 +298,8 @@ class MobileController extends AbstractController
                 return $response;
             }
 
-            $period->setTimeStart($jsonPeriod->timeStart);
-            $period->setTimeEnd($jsonPeriod->timeEnd);
+            $period->setTimeStart(new DateTime($jsonPeriod->timeStart));
+            $period->setTimeEnd(new DateTime($jsonPeriod->timeEnd));
             $period->setWeekDay($jsonPeriod->weekDay);
             $period->setActive($jsonPeriod->active);
 
