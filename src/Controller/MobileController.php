@@ -171,9 +171,9 @@ class MobileController extends AbstractController
             return $response;
         }
 
-        foreach($controller->getPeriods() as $period){
-            $em->remove($period);
-        }
+//        foreach($controller->getPeriods() as $period){
+//            $em->remove($period);
+//        }
 
         $controller->setMode($jsonData->mode);
         $controller->setTempMax($jsonData->tempMax);
@@ -184,17 +184,17 @@ class MobileController extends AbstractController
 //        $serializer = new Serializer($normalizers, $encoders);
 //
 //        $periods = $serializer->deserialize($jsonData->periods, Period::class, 'json');
-        $jsonPeriods = $jsonData->periods;
-
-        foreach($jsonPeriods as $jsonPeriod){
-            $period = new Period();
-            $period->setMicroController($controller);
-            $period->setWeekDay($jsonPeriod->weekDay);
-            $period->setTimeStart($jsonPeriod->timeStart);
-            $period->setTimeEnd($jsonPeriod->timeEnd);
-            $controller->addPeriod($period);
-            $em->persist($period);
-        }
+//        $jsonPeriods = $jsonData->periods;
+//
+//        foreach($jsonPeriods as $jsonPeriod){
+//            $period = new Period();
+//            $period->setMicroController($controller);
+//            $period->setWeekDay($jsonPeriod->weekDay);
+//            $period->setTimeStart($jsonPeriod->timeStart);
+//            $period->setTimeEnd($jsonPeriod->timeEnd);
+//            $controller->addPeriod($period);
+//            $em->persist($period);
+//        }
 
         $em->persist($controller);
         $em->flush();
