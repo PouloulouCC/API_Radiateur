@@ -250,10 +250,10 @@ class MobileController extends AbstractController
 
             $period = new Period();
 
-            $period->setTimeStart($jsonData->timeStart);
-            $period->setTimeEnd($jsonData->timeEnd);
-            $period->setWeekDay($jsonData->weekDay);
-            $period->setActive($jsonData->active);
+            $period->setTimeStart($jsonPeriod->timeStart);
+            $period->setTimeEnd($jsonPeriod->timeEnd);
+            $period->setWeekDay($jsonPeriod->weekDay);
+            $period->setActive($jsonPeriod->active);
 
             $controller->addPeriod($period);
 
@@ -288,7 +288,7 @@ class MobileController extends AbstractController
         }
 
         foreach ($jsonData->periods as $jsonPeriod) {
-            $period = $em->getRepository('App:Period')->findOneById($jsonData->id);
+            $period = $em->getRepository('App:Period')->findOneById($jsonPeriod->id);
 
             if (!$controller->getPeriods()->contains($period)) {
                 $response = new Response();
@@ -296,10 +296,10 @@ class MobileController extends AbstractController
                 return $response;
             }
 
-            $period->setTimeStart($jsonData->timeStart);
-            $period->setTimeEnd($jsonData->timeEnd);
-            $period->setWeekDay($jsonData->weekDay);
-            $period->setActive($jsonData->active);
+            $period->setTimeStart($jsonPeriod->timeStart);
+            $period->setTimeEnd($jsonPeriod->timeEnd);
+            $period->setWeekDay($jsonPeriod->weekDay);
+            $period->setActive($jsonPeriod->active);
 
             $em->persist($period);
         }
@@ -330,7 +330,7 @@ class MobileController extends AbstractController
         }
 
         foreach ($jsonData->periods as $jsonPeriod) {
-            $period = $em->getRepository('App:Period')->findOneById($jsonData->id);
+            $period = $em->getRepository('App:Period')->findOneById($jsonPeriod->id);
 
             if (!$controller->getPeriods()->contains($period)) {
                 $response = new Response();
