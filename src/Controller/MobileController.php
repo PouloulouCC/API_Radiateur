@@ -254,6 +254,7 @@ class MobileController extends AbstractController
             $period->setTimeEnd($jsonPeriod->timeEnd);
             $period->setWeekDay($jsonPeriod->weekDay);
             $period->setActive($jsonPeriod->active);
+            $period->setMicroController($controller);
 
             $controller->addPeriod($period);
 
